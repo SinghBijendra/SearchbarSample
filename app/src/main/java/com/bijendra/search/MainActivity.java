@@ -41,18 +41,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
        searchView.setSearchableInfo(searchManager.getSearchableInfo(
                new ComponentName(this, MainActivity.class)));
-       searchView.setIconifiedByDefault(true);
+       searchView.setIconifiedByDefault(false);
 
 
        return true;
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.search) {
+            onSearchRequested();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putString("hello", "world");
+        startSearch(null, false, appData, false);
+        return true;
+    }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(this, "Searching by: "+ query, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Searching text: "+ query, Toast.LENGTH_SHORT).show();
 
         }
     }
